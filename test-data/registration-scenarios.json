@@ -1,0 +1,18 @@
+{
+  "negative": [
+    {
+      "title": "missing email",
+      "overrides": {
+        "email": ""
+      },
+      "expectedError": "email"
+    },
+    {
+      "title": "missing password",
+      "overrides": {
+        "password": ""
+      },
+      "expectedError": "password"
+    }
+  ]
+}

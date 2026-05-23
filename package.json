@@ -1,0 +1,22 @@
+{
+  "name": "toolshop-playwright-framework",
+  "version": "1.0.0",
+  "description": "Production-grade Playwright JavaScript framework for Toolshop demo app",
+  "private": true,
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:smoke": "playwright test --grep @smoke",
+    "test:regression": "playwright test --grep @regression",
+    "test:e2e": "playwright test --grep @e2e",
+    "test:ui": "playwright test --ui",
+    "report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.2",
+    "@faker-js/faker": "^9.9.0",
+    "@playwright/test": "^1.59.1",
+    "@types/node": "^25.6.0",
+    "dotenv": "^16.4.5"
+  }
+}

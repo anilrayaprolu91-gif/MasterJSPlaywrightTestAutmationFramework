@@ -1,0 +1,5 @@
+{
+  "searchTerms": ["hammer", "screwdriver", "pliers"],
+  "filterLabel": "ForgeFlex Tools",
+  "sortOptions": ["Price (Low - High)", "Name (A - Z)"]
+}

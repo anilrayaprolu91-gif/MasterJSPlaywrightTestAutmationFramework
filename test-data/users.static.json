@@ -1,0 +1,28 @@
+{
+  "standard": {
+    "firstName": "Ava",
+    "lastName": "Stone",
+    "dateOfBirth": "1992-03-15",
+    "street": "123 Market Street",
+    "postalCode": "10001",
+    "city": "New York",
+    "state": "NY",
+    "country": "United States of America (the)",
+    "phone": "+1-212-555-0101",
+    "email": "standard.user@example.com",
+    "password": "Password123!"
+  },
+  "admin": {
+    "firstName": "Liam",
+    "lastName": "Cole",
+    "dateOfBirth": "1988-07-22",
+    "street": "456 Admin Avenue",
+    "postalCode": "94105",
+    "city": "San Francisco",
+    "state": "CA",
+    "country": "United States of America (the)",
+    "phone": "+1-415-555-0155",
+    "email": "admin.user@example.com",
+    "password": "Password123!"
+  }
+}

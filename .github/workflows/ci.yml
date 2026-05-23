@@ -1,0 +1,92 @@
+name: Playwright CI
+
+on:
+  push:
+    branches:
+      - main
+      - master
+      - develop
+  pull_request:
+    branches:
+      - main
+      - master
+      - develop
+
+permissions:
+  contents: read
+
+concurrency:
+  group: playwright-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  e2e-tests:
+    name: Run Playwright Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    env:
+      CI: true
+      BASE_URL: ${{ vars.BASE_URL || 'https://practicesoftwaretesting.com' }}
+      STANDARD_USER_EMAIL: ${{ secrets.STANDARD_USER_EMAIL }}
+      STANDARD_USER_PASSWORD: ${{ secrets.STANDARD_USER_PASSWORD }}
+      ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
+      ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Build runtime environment file
+        shell: bash
+        run: |
+          cat <<EOF > .env
+          BASE_URL=${BASE_URL}
+          STANDARD_USER_EMAIL=${STANDARD_USER_EMAIL}
+          STANDARD_USER_PASSWORD=${STANDARD_USER_PASSWORD}
+          ADMIN_EMAIL=${ADMIN_EMAIL}
+          ADMIN_PASSWORD=${ADMIN_PASSWORD}
+          EOF
+
+      - name: Select test scope
+        id: scope
+        shell: bash
+        run: |
+          if [[ -n "${STANDARD_USER_EMAIL}" && -n "${STANDARD_USER_PASSWORD}" ]]; then
+            echo "command=npx playwright test" >> "$GITHUB_OUTPUT"
+            echo "Running full suite with authenticated scenarios."
+          else
+            echo "command=npx playwright test --grep @regression" >> "$GITHUB_OUTPUT"
+            echo "Auth secrets missing. Running regression-tagged suite only."
+          fi
+
+      - name: Run Playwright tests
+        run: ${{ steps.scope.outputs.command }}
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 14
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: test-results/
+          retention-days: 14
